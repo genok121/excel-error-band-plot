@@ -61,7 +61,8 @@ GROUPS = [
         "band_edge_width": 0.0,
         "marker": None,
         "marker_size": 4.0,
-        "show_period_average": False,
+        "show_period_average": True,
+        "average_label": "NO period mean",
         "average_color": "#B94A00",
         "average_style": "--",
         "average_width": 1.5,
@@ -81,7 +82,8 @@ GROUPS = [
         "band_edge_width": 0.0,
         "marker": None,
         "marker_size": 4.0,
-        "show_period_average": False,
+        "show_period_average": True,
+        "average_label": "NO2 period mean",
         "average_color": "#174A70",
         "average_style": "--",
         "average_width": 1.5,
@@ -112,7 +114,7 @@ GRID_ALPHA = 0.6
 SHOW_LEGEND = True
 LEGEND_LOCATION = "upper right"
 LEGEND_FRAME = False
-LEGEND_COLUMNS = 1
+LEGEND_COLUMNS = 2
 
 # 时段标签和分隔线
 SHOW_PERIOD_LABELS = True
@@ -289,6 +291,7 @@ def make_plot(
             continue
 
         legend_used = False
+        average_legend_used = False
         for period in periods:
             part = plot_data[plot_data["period"] == period]
             if part.empty:
@@ -343,8 +346,14 @@ def make_plot(
                         color=group["average_color"],
                         linestyle=group["average_style"],
                         linewidth=group["average_width"],
+                        label=(
+                            group["average_label"]
+                            if not average_legend_used
+                            else None
+                        ),
                         zorder=4,
                     )
+                    average_legend_used = True
 
     tick_rows = plot_data[
         (
